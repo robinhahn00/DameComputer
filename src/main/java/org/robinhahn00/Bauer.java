@@ -38,7 +38,11 @@ public class Bauer extends Stein {
 
         int deltaX= (int) Math.sqrt(Math.pow(start.getKoord()[0]-ziel.getKoord()[0],2)); //Betrag der differenz der koordinaten der 2 gedrückten felder
         int deltaY= (int) Math.sqrt(Math.pow(start.getKoord()[1]-ziel.getKoord()[1],2));
+        if(ziel.getStein()!=null){
+            return false;
+        }
         if(schlagGueltig(start, ziel, felder)){
+
             return true;
         }
         if(deltaX==1&&deltaY==1){
@@ -70,7 +74,9 @@ public class Bauer extends Stein {
         int deltaX= (int) Math.sqrt(Math.pow(start.getKoord()[0]-ziel.getKoord()[0],2)); //Betrag der differenz der koordinaten der 2 gedrückten felder
         int deltaY= (int) Math.sqrt(Math.pow(start.getKoord()[1]-ziel.getKoord()[1],2));
         int [] opferKoords= new int[2]; //koordinaten des zu schlagendem steins
-
+        if(ziel.getStein()!=null){
+            return false;
+        }
         opferKoords[0]= start.getKoord()[0]-(start.getKoord()[0]-ziel.getKoord()[0])/2; //berechne koordinaten des zu schlagendem
         opferKoords[1]= start.getKoord()[1]-(start.getKoord()[1]-ziel.getKoord()[1])/2;
 
@@ -82,6 +88,7 @@ public class Bauer extends Stein {
                         mp3Schlag.play();
                         felder[opferKoords[0]][opferKoords[1]].setGraphic(new ImageView(blank));
                         felder[opferKoords[0]][opferKoords[1]].setStein(null);
+                        start.getBrettItsOn().setWurdeGradeGeschlagen(true);
                         return true;
                     } else {
                         return false;
@@ -94,4 +101,32 @@ public class Bauer extends Stein {
         return false;
     }
 
+    @Override
+    public boolean schlagMoeglich(Feld start, Feld ziel, Feld[][] f) { // =schlagGueltig, aber ohne wirklich zu schlagen
+        int deltaX= (int) Math.sqrt(Math.pow(start.getKoord()[0]-ziel.getKoord()[0],2)); //Betrag der differenz der koordinaten der 2 gedrückten felder
+        int deltaY= (int) Math.sqrt(Math.pow(start.getKoord()[1]-ziel.getKoord()[1],2));
+        int [] opferKoords= new int[2]; //koordinaten des zu schlagendem steins
+        if(ziel.getStein()!=null){
+            return false;
+        }
+        opferKoords[0]= start.getKoord()[0]-(start.getKoord()[0]-ziel.getKoord()[0])/2; //berechne koordinaten des zu schlagendem
+        opferKoords[1]= start.getKoord()[1]-(start.getKoord()[1]-ziel.getKoord()[1])/2;
+
+        if(deltaX==2&&deltaY==2) {
+            if (f[opferKoords[0]][opferKoords[1]].getStein() != null){
+                if(start.getStein()!=null) {
+                    if (f[opferKoords[0]][opferKoords[1]].getStein().getSteinC() != start.getStein().getSteinC()) {
+                        //hier wird der eigentliche schlag nicht ausgeführt
+
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }else {
+            return false;
+        }
+        return false;
+    }
 }

@@ -43,7 +43,8 @@ public abstract class Stein extends ImageView {
     }
 
     public abstract boolean zugGueltig(Feld start, Feld ziel, Feld [][] f);
-    //public abstract boolean schlagGueltig(Feld start, Feld ziel, Feld [][] f);
+    public abstract boolean schlagGueltig(Feld start, Feld ziel, Feld [][] f);
+    public abstract boolean schlagMoeglich(Feld start, Feld ziel, Feld [][] f);
 
 
 }

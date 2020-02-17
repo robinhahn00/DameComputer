@@ -158,4 +158,8 @@ public class Dame extends Stein{
         return c;
     }
 
+    @Override
+    public boolean schlagMoeglich(Feld start, Feld ziel, Feld[][] f) {
+        return false;
+    }
 }
