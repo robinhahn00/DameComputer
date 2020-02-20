@@ -27,42 +27,40 @@ public class App extends Application {
 
         stage.setTitle("Dame");
 
-        BorderPane layout= new BorderPane();
-        GridPane brett= new Brett(8).getBrett();
+        BorderPane layout = new BorderPane();
+        GridPane brett = new Brett(8).getBrett();
 
         layout.setCenter(brett);
-        Button reset= new Button("Reset"); //noch keine funktion
+        Button reset = new Button("Reset"); //noch keine funktion
         reset.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override public void handle(ActionEvent e) {
-                        stage.close();
-                        restart();
-                    }
+            @Override
+            public void handle(ActionEvent e) {
+                stage.close();
+                restart();
+            }
         });
         layout.setLeft(reset);
         var scene = new Scene(layout, 640, 480);
-        TextField f= new TextField("Schlag den Computer... Wenn du es schaffst ;)");
+        TextField f = new TextField("Schlag den Computer... Wenn du es schaffst ;)");
         layout.setTop(f);
         stage.setScene(scene);
         stage.show();
     }
-    public void restart(){
-               cleanUp();
-               Stage s = new Stage();
-               start(s);
+
+    public void restart() {
+        cleanUp();
+        Stage s = new Stage();
+        start(s);
     }
-    private void cleanUp(){
+
+    private void cleanUp() {
         //cleaning
-        
+
     }
 
     public static void main(String[] args) {
         launch(args);
     }
-
-
-
-
-
 
 
 }

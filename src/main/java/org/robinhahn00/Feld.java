@@ -3,54 +3,62 @@ package org.robinhahn00;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.*;
+
 import java.io.File;
 
 
 public class Feld extends Button {
-
-    private int [] xy= new int[2];
-    private boolean istWeiss=false;
+    //Das Feld ist ein Button der gedrückt werden kann. Steine stehen auf einem Feld
+    private int[] xy = new int[2];
+    private boolean istWeiss = false;
     private Brett brett;
-    private Stein s=null;
-    private ImageView iv;
-    private boolean gedrueckt= false; //ist das Feld gedrueckt?
+    private Stein s = null;
+    
+    private boolean gedrueckt = false; //ist das Feld gedrueckt?
 
 
-    public Feld(Brett b, boolean w){
+    public Feld(Brett b, boolean w) {
 
 
-        brett=b;
-        istWeiss=w;
-        if(w) {
-            this.setStyle("-fx-background-color: #000000");
-        }else{
-            this.setStyle("-fx-background-color: #ffffff");
+        brett = b;
+        istWeiss = w;
+        if (w) {
+            this.setStyle("-fx-background-color: #000000"); //weiss
+        } else {
+            this.setStyle("-fx-background-color: #ffffff"); //schwarz
         }
     }
-    public int[] getKoord(){
+
+    public int[] getKoord() {
         return xy;
     }
-    public void setKoord(int x, int y){
-        xy[0]=x;
-        xy[1]=y;
+
+    public void setKoord(int x, int y) {
+        xy[0] = x;
+        xy[1] = y;
     }
 
-    public void setStein( Stein s){
+    public void setStein(Stein s) {
         this.s = s;
     }
-    public Stein getStein(){
+
+    public Stein getStein() {
         return s;
     }
-    public boolean getColour(){
+
+    public boolean getColour() {
         return istWeiss;
     }
-    public boolean getGedrueckt(){
+
+    public boolean getGedrueckt() {
         return gedrueckt;
     }
-    public void setGedrueckt(boolean b){
-        gedrueckt=b;
+
+    public void setGedrueckt(boolean b) {
+        gedrueckt = b;
     }
-    public Brett getBrettItsOn(){
+
+    public Brett getBrettItsOn() {
         return brett;
     }
 }
