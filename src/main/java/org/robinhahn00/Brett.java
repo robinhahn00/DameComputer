@@ -24,6 +24,7 @@ public class Brett extends GridPane {
     int anzahlWeisseSteine; //wenn einer gleich 0, dann spiel vorbei
     int anzahlSchwarzeSteine;
     boolean wurdeGeschlagen=false; //wurde im letzten zug geschlagen?
+    COM computer;
 
     boolean weissAnDerReihe = true; //die spieler müssen abwechselnd ziehen
     Feld feldGedrueckt = null; //welches Feld ist gedrückt
@@ -49,6 +50,7 @@ public class Brett extends GridPane {
     public Brett(int s) {
         size = s;
         brett = this;
+
 
     }
 
@@ -92,6 +94,7 @@ public class Brett extends GridPane {
         }
         anzahlWeisseSteine = countSteine(); //wenn einer gleich 0, dann spiel vorbei
         int anzahlSchwarzeSteine = anzahlWeisseSteine;
+        computer= new COMEasy(this);
 
 
         return brett;
@@ -125,6 +128,9 @@ public class Brett extends GridPane {
             @Override
             public void handle(ActionEvent e) {
 
+
+
+                if(weissAnDerReihe){
                 if (f != feldGedrueckt) {
                     if (!f.getGedrueckt()) {
                         DropShadow shadow = new DropShadow();
@@ -135,60 +141,10 @@ public class Brett extends GridPane {
                             if (feldGedrueckt.getStein() != null) {
                                 if (feldGedrueckt.getStein().getSteinC() == weissAnDerReihe) {
                                     if (!mussGeschlagenWerden(feldGedrueckt, f)) { //gucken ob kein anderer stein geschlagen werden muss
-                                        if (feldGedrueckt.getStein().zugGueltig(feldGedrueckt, f, felder)) {
-                                            if(!wurdeGeschlagen) {
-                                                if (weissAnDerReihe) {
-                                                    weissAnDerReihe = false;
-                                                } else {
-                                                    weissAnDerReihe = true;
-                                                }
-                                            }else{
-                                                //mit dem einem stein darf noch weiter geschlagen werden falls möglich
-                                            }
-                                            wurdeGeschlagen=false;
-
-                                            f.setGraphic(feldGedrueckt.getGraphic());
-                                            //gucken ob stein zur dame wird
-                                            boolean bauerZuDame = false; //wenn der Bauer zur Dame wird, soll er nicht den Typ Stein des Vorgänger-Feldes annehmen
-                                            if (feldGedrueckt.getStein().getSteinC()) {
-
-                                                if (f.getKoord()[1] == size - 1) {
-                                                    //dame
-                                                    bauerZuDame = true;
-                                                    f.setStein(null);
-                                                    f.setStein(new Dame(f, true));
-                                                    f.getStein().setDame();
-
-                                                    f.setGraphic(new ImageView(weissDame));
-                                                }
-                                            } else {
-
-                                                if (f.getKoord()[1] == 0) {
-                                                    //dame
-                                                    bauerZuDame = true;
-                                                    f.setStein(null);
-                                                    f.setStein(new Dame(f, false));
-                                                    f.getStein().setDame();
-
-                                                    f.setGraphic(new ImageView(schwarzDame));
-                                                }
-                                            }
 
 
-                                            //stein auf neuem feld erzeugen
-                                            if (!bauerZuDame) {
+                                            zug(f);
 
-                                                if (feldGedrueckt.getStein().istDame()) {
-                                                    f.setStein(new Dame(f, feldGedrueckt.getStein().getSteinC()));
-                                                } else {
-                                                    f.setStein(new Bauer(f, feldGedrueckt.getStein().getSteinC()));
-                                                }
-                                            }
-                                            feldGedrueckt.setGraphic(new ImageView(blank)); //stein von altem feld löschen
-                                            feldGedrueckt.setStein(null);
-                                            releaseButton(feldGedrueckt);
-                                            releaseButton(f);
-                                        }
                                     } else {
                                         releaseButton(feldGedrueckt);
                                         releaseButton(f);
@@ -212,12 +168,27 @@ public class Brett extends GridPane {
                     releaseButton(f);
 
                 }
+                }
+                else{
+                comIstDran();
+                }
             }
         });
 
 
     }
 
+    private void comIstDran(){
+        if(!weissAnDerReihe){ //computer ist dran
+
+            Feld[] comZug=computer.ziehe();
+            Feld start = comZug[0];
+            Feld ziel = comZug[1];
+            feldGedrueckt=start;
+
+            zug(ziel); //zug des COMs
+        }
+    }
     private void releaseButton(Feld f) {
         if (f != null) {
             f.setEffect(null);
@@ -246,6 +217,66 @@ public class Brett extends GridPane {
 
     public Brett returnBrett() {
         return brett;
+    }
+    public void zug(Feld f){
+        if (feldGedrueckt.getStein() != null) {
+        if(feldGedrueckt.getStein().zugGueltig(feldGedrueckt, f, felder)) {
+            if (!wurdeGeschlagen) {
+                if (weissAnDerReihe) {
+                    weissAnDerReihe = false;
+                } else {
+                    weissAnDerReihe = true;
+                }
+            } else {
+                //mit dem einem stein darf noch weiter geschlagen werden falls möglich
+            }
+            wurdeGeschlagen = false;
+
+            f.setGraphic(feldGedrueckt.getGraphic());
+            //gucken ob stein zur dame wird
+            boolean bauerZuDame = false; //wenn der Bauer zur Dame wird, soll er nicht den Typ Stein des Vorgänger-Feldes annehmen
+
+                if (feldGedrueckt.getStein().getSteinC()) {
+
+                    if (f.getKoord()[1] == size - 1) {
+                        //dame
+                        bauerZuDame = true;
+                        f.setStein(null);
+                        f.setStein(new Dame(f, true));
+                        f.getStein().setDame();
+
+                        f.setGraphic(new ImageView(weissDame));
+                    }
+                } else {
+
+                    if (f.getKoord()[1] == 0) {
+                        //dame
+                        bauerZuDame = true;
+                        f.setStein(null);
+                        f.setStein(new Dame(f, false));
+                        f.getStein().setDame();
+
+                        f.setGraphic(new ImageView(schwarzDame));
+                    }
+                }
+
+
+
+            //stein auf neuem feld erzeugen
+            if (!bauerZuDame) {
+
+                if (feldGedrueckt.getStein().istDame()) {
+                    f.setStein(new Dame(f, feldGedrueckt.getStein().getSteinC()));
+                } else {
+                    f.setStein(new Bauer(f, feldGedrueckt.getStein().getSteinC()));
+                }
+            }
+            feldGedrueckt.setGraphic(new ImageView(blank)); //stein von altem feld löschen
+            feldGedrueckt.setStein(null);
+        }}
+        releaseButton(feldGedrueckt);
+        releaseButton(f);
+
     }
 
     private boolean mussGeschlagenWerden(Feld eingabeStart, Feld eingabeZiel) { //true= anstelle des zuges muss ein anderer gemacht werden

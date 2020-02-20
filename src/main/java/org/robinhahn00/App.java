@@ -29,6 +29,7 @@ public class App extends Application {
 
         BorderPane layout= new BorderPane();
         GridPane brett= new Brett(8).getBrett();
+
         layout.setCenter(brett);
         Button reset= new Button("Reset"); //noch keine funktion
         reset.setOnAction(new EventHandler<ActionEvent>() {

@@ -35,37 +35,38 @@ public class Bauer extends Stein {
 
     @Override
     public boolean zugGueltig(Feld start, Feld ziel, Feld[][] felder) {
-
-        int deltaX= (int) Math.sqrt(Math.pow(start.getKoord()[0]-ziel.getKoord()[0],2)); //Betrag der differenz der koordinaten der 2 gedrückten felder
-        int deltaY= (int) Math.sqrt(Math.pow(start.getKoord()[1]-ziel.getKoord()[1],2));
-        if(ziel.getStein()!=null){
-            return false;
-        }
-        if(schlagGueltig(start, ziel, felder)){
-
-            return true;
-        }
-        if(deltaX==1&&deltaY==1){
-            if(felder[ziel.getKoord()[0]][ziel.getKoord()[1]].getStein()!=null){ //ist feld besetzt?
-                return false;
-            }else{
-                //gucken ob stein in richtige richtung geht
-                if(start.getStein().getSteinC()){ //weiss
-                    if(start.getKoord()[1]<ziel.getKoord()[1]){ //weiss darf nur nach unten gehen
-                        mp3zug.play();
-                        return true;
-                    }
-                }else{ //schwarz
-                    if(start.getKoord()[1]>ziel.getKoord()[1]){ //schwarz darf nur nach oben gehen
-                        mp3zug.play();
-                        return true;
-                    }
-                }
+        if(start!=null&&ziel!=null) {
+            int deltaX = (int) Math.sqrt(Math.pow(start.getKoord()[0] - ziel.getKoord()[0], 2)); //Betrag der differenz der koordinaten der 2 gedrückten felder
+            int deltaY = (int) Math.sqrt(Math.pow(start.getKoord()[1] - ziel.getKoord()[1], 2));
+            if (ziel.getStein() != null) {
                 return false;
             }
-        }else{
-            return false;
-        }
+            if (schlagGueltig(start, ziel, felder)) {
+
+                return true;
+            }
+            if (deltaX == 1 && deltaY == 1) {
+                if (felder[ziel.getKoord()[0]][ziel.getKoord()[1]].getStein() != null) { //ist feld besetzt?
+                    return false;
+                } else {
+                    //gucken ob stein in richtige richtung geht
+                    if (start.getStein().getSteinC()) { //weiss
+                        if (start.getKoord()[1] < ziel.getKoord()[1]) { //weiss darf nur nach unten gehen
+                            mp3zug.play();
+                            return true;
+                        }
+                    } else { //schwarz
+                        if (start.getKoord()[1] > ziel.getKoord()[1]) { //schwarz darf nur nach oben gehen
+                            mp3zug.play();
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }return false;
     }
 
 
