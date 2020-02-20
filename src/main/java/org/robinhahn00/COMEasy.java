@@ -6,23 +6,27 @@ import javafx.scene.image.ImageView;
 import java.io.File;
 import java.util.LinkedList;
 
-public class COMEasy extends COM {
+public class COMEasy extends COM { //COMEasy erbt von COM
 
     File fileBlank = new File("/Users/robin/Desktop/Dame/Leer.png"); //kein Stein
     public Image blank = new Image(fileBlank.toURI().toString());
 
-    Feld[] zug = new Feld[2];
+    Feld[] zug = new Feld[2]; //das ist der Zug den der Computer spielt. zug[0]=start-feld; zug[1]=ziel-feld
     Brett brett;
 
 
-    LinkedList<Stein> möglich = new LinkedList<Stein>();
-    Feld[][] felder;
+    LinkedList<Stein> möglich = new LinkedList<Stein>(); //eine Liste aller Steine, die sich aktuell bewegen könnten
+    Feld[][] felder; //die Felder/Buttons des Spiels auf dem die Steine stehen. Durch die Besetzung dieser Felder entscheider
+    //der Computer wie er ziehen soll.
 
-    public COMEasy(Brett b) {
+    public COMEasy(Brett b) { //Konstruktor der nur das Brett übergeben bekommt
         brett = b;
 
     }
 
+    //Methode die in der Klasse Brett aufgerufen wird um den Zug des COM einzuleiten. Das Feld[] wird zurück gegeben
+    // wobei hier der [0] Startpunkt und das [1] Ziel gespeichert werden
+    @Override
     public Feld[] ziehe() {
         felder = brett.getFelderArray();
         for (int i = 0; i < felder.length; i++) {

@@ -7,17 +7,15 @@ import javafx.scene.layout.GridPane;
 import java.io.File;
 
 public abstract class Stein extends ImageView {
-    private boolean dame;
-    private Feld feld;
-    private boolean istWeiss;
-    private Brett brett;
+    private boolean dame; //Ist der Stein eine Dame?
+    private Feld feld; //Auf welchem Feld befindet sich der Stein?
+    private boolean istWeiss; //Ist der Stein Weiss?
+    private Brett brett; //Auf welchem Brett befindet sich der Stein?
 
     public Stein(Feld f, boolean w) {
         feld = f;
         istWeiss = w;
-        // File file = new File("/Users/robin/Desktop/Dame/White.jpg");
-        //Image image = new Image(file.toURI().toString());
-        //ImageView iv = new ImageView(image);
+
     }
 
     public boolean getSteinC() {

@@ -12,8 +12,8 @@ public class Feld extends Button {
     private int[] xy = new int[2];
     private boolean istWeiss = false;
     private Brett brett;
-    private Stein s = null;
-    
+    private Stein s = null; //null=leer
+
     private boolean gedrueckt = false; //ist das Feld gedrueckt?
 
 
@@ -29,36 +29,36 @@ public class Feld extends Button {
         }
     }
 
-    public int[] getKoord() {
+    public int[] getKoord() { //gibt Koordinaten aus
         return xy;
     }
 
-    public void setKoord(int x, int y) {
+    public void setKoord(int x, int y) { //legt die koordinaten fest
         xy[0] = x;
         xy[1] = y;
     }
 
-    public void setStein(Stein s) {
+    public void setStein(Stein s) { //setzt Stein s auf ein feld
         this.s = s;
     }
 
-    public Stein getStein() {
+    public Stein getStein() { //welcher Stein ist auf dem Feld? Wenn null returnt wird ist das Feld leer
         return s;
     }
 
-    public boolean getColour() {
+    public boolean getColour() { //true= weiss, false=schwarz
         return istWeiss;
     }
 
-    public boolean getGedrueckt() {
+    public boolean getGedrueckt() { //ist das Feld aktuell gedrueckt?
         return gedrueckt;
     }
 
-    public void setGedrueckt(boolean b) {
+    public void setGedrueckt(boolean b) { //markiere das Feld als gedrueckt
         gedrueckt = b;
     }
 
-    public Brett getBrettItsOn() {
+    public Brett getBrettItsOn() { //auf welchem Brett ist das Feld?
         return brett;
     }
 }

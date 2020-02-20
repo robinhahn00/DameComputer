@@ -47,16 +47,13 @@ public class App extends Application {
         stage.show();
     }
 
-    public void restart() {
-        cleanUp();
+    public void restart() { //Methode die das Spiel neu startet und alle Steine auf ihre Grundposition zurück setzt
+
         Stage s = new Stage();
         start(s);
     }
 
-    private void cleanUp() {
-        //cleaning
 
-    }
 
     public static void main(String[] args) {
         launch(args);
