@@ -33,7 +33,7 @@ public class App extends Application {
             }
         });
         layout.setLeft(reset);
-        var scene = new Scene(layout, 640, 480);
+        var scene = new Scene(layout, 750, 690);
         var f = new TextField("Schlag den Computer... Wenn du es schaffst ;)");
         layout.setTop(f);
         stage.setScene(scene);
