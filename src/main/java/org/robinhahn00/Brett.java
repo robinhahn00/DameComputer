@@ -86,47 +86,62 @@ public class Brett extends GridPane {
         feld.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent e) {
+
+                // computer ist dran
                 if (!weissAnDerReihe) {
-                    comIstDran();
-                } else {
-                    if (feld == feldGedrueckt) {
-                        releaseButton(feld);
-                    } else {
-                        if (!feld.getGedrueckt()) {
-                            DropShadow shadow = new DropShadow();
-                            feld.setEffect(shadow);
-                            feld.setGedrueckt(true);
-                            if (feldGedrueckt != null) {
-                                //speicher alten stein ab
-                                if (feldGedrueckt.getStein() != null) {
-                                    if (feldGedrueckt.getStein().getSteinC() == weissAnDerReihe) {
-                                        if (!mussGeschlagenWerden(feldGedrueckt, feld)) { //gucken ob kein anderer stein geschlagen werden muss
-                                            zug(feld);
-
-                                        } else {
-                                            releaseButton(feldGedrueckt);
-                                            releaseButton(feld);
-                                        }
-                                    } else {
-                                        releaseButton(feldGedrueckt);
-                                        releaseButton(feld);
-                                    }
-                                }
-                            } else {
-                                feldGedrueckt = feld;
-                            }
-                        } else {
-                            releaseButton(feld);
-                            releaseButton(feldGedrueckt);
-                        }
-
-                    }
+                    computerZug();
+                    return;
                 }
+
+                // markiertes feld wieder freigeben
+                if (feld == feldGedrueckt) {
+                    releaseButton(feld);
+                    return;
+                }
+
+                // markiertes feld wieder freigeben
+                if (feld.getGedrueckt()) {
+                    releaseButton(feld);
+                    releaseButton(feldGedrueckt);
+                    return;
+                }
+
+                // feld markieren
+                DropShadow shadow = new DropShadow();
+                feld.setEffect(shadow);
+                feld.setGedrueckt(true);
+                if (feldGedrueckt == null) {
+                    feldGedrueckt = feld;
+                    return;
+                }
+
+                // wenn auf dem feld kein stein ist, ignorieren
+                if (feldGedrueckt.getStein() == null) {
+                    return;
+                }
+
+                // speicher alten stein ab
+                if (feldGedrueckt.getStein().getSteinC() == weissAnDerReihe) {
+
+                    // gucken ob kein anderer stein geschlagen werden muss
+                    if (!mussGeschlagenWerden(feldGedrueckt, feld)) {
+                        zug(feld);
+                    } else {
+                        releaseButton(feldGedrueckt);
+                        releaseButton(feld);
+                    }
+
+                } else {
+                    releaseButton(feldGedrueckt);
+                    releaseButton(feld);
+                }
+
+
             }
         });
     }
 
-    private void comIstDran() {
+    private void computerZug() {
         if (weissAnDerReihe) {
             return;
         }
