@@ -9,8 +9,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.io.File;
-
 /**
  * JavaFX APP Dame Computer
  */
@@ -36,6 +34,18 @@ public class App extends Application {
         var scene = new Scene(layout, 750, 690);
         var f = new TextField("Schlag den Computer... Wenn du es schaffst ;)");
         layout.setTop(f);
+
+        brett.setPlayerChangedListener(new Brett.PlayerChangedListener() {
+            @Override
+            public void onPlayherChanged(boolean weissAnDerReihe) {
+                if (weissAnDerReihe) {
+                    f.setText("Spieler weiß ist dran");
+                } else {
+                    f.setText("Spieler schwarz ist dran");
+                }
+            }
+        });
+
         stage.setScene(scene);
         stage.show();
     }

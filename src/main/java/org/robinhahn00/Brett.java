@@ -1,5 +1,6 @@
 package org.robinhahn00;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -7,11 +8,18 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
+import java.util.Random;
+
 public class Brett extends GridPane {
+
+    public interface PlayerChangedListener {
+        public void onPlayherChanged(boolean weissAnDerReihe);
+    }
 
     private int size;
     private Feld[][] felder = new Feld[size][size];
     private Feld feldGedrueckt; // welches Feld wurde gedrückt
+    private PlayerChangedListener playerChangedListener;
 
     private COM computer;
     private boolean wurdeGeschlagen = false; // wurde im letzten zug geschlagen?
@@ -21,6 +29,10 @@ public class Brett extends GridPane {
         size = s;
         computer = new COMEasy(this);
         initializeBoard();
+    }
+
+    public void setPlayerChangedListener(PlayerChangedListener listener) {
+        this.playerChangedListener = listener;
     }
 
     private void initializeBoard() {
@@ -89,7 +101,8 @@ public class Brett extends GridPane {
 
                 // computer ist dran
                 if (!weissAnDerReihe) {
-                    computerZug();
+                    // wird nun simuliert
+                    // computerZug();
                     return;
                 }
 
@@ -136,7 +149,8 @@ public class Brett extends GridPane {
                     releaseButton(feld);
                 }
 
-
+                // einfach
+                computerZug();
             }
         });
     }
@@ -152,7 +166,24 @@ public class Brett extends GridPane {
         Feld ziel = comZug[1];
         feldGedrueckt = start;
 
-        zug(ziel); //zug des COMs
+        // separate non-FX thread
+        new Thread(() -> {
+            try {
+                // imitating guess work between 0 and 2 seconds
+                Thread.sleep(new Random().nextInt(2000));
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            Platform.runLater(() -> {
+                zug(ziel);
+                // computer darf ggf. öfter ziehen.
+                if (!weissAnDerReihe) {
+                    computerZug();
+                }
+            });
+
+        }).start();
+
     }
 
     private void releaseButton(Feld f) {
@@ -184,6 +215,7 @@ public class Brett extends GridPane {
 
 
     public void zug(Feld feld) {
+        var originWeissAnDerReihe = weissAnDerReihe;
         if (feldGedrueckt.getStein() != null) {
             if (feldGedrueckt.getStein().zugGueltig(feldGedrueckt, feld, felder)) {
                 if (!wurdeGeschlagen) {
@@ -234,9 +266,12 @@ public class Brett extends GridPane {
                 feldGedrueckt.setStein(null);
             }
         }
+
+        if (playerChangedListener != null && weissAnDerReihe != originWeissAnDerReihe) {
+            playerChangedListener.onPlayherChanged(weissAnDerReihe);
+        }
         releaseButton(feldGedrueckt);
         releaseButton(feld);
-
     }
 
     private boolean mussGeschlagenWerden(Feld eingabeStart, Feld eingabeZiel) { //true= anstelle des zuges muss ein anderer gemacht werden
