@@ -9,28 +9,30 @@ import java.io.File;
 
 public class Dame extends Stein {
 
-    //Datei für ein leeres Bild ohne Stein
-    File fileBlank = new File("/Users/robin/Desktop/Dame/Leer.png"); //kein Stein
-    public Image blank = new Image(fileBlank.toURI().toString());
+    private Image blank;
+    private MediaPlayer mp3zug;
+    private MediaPlayer mp3Schlag;
 
-    //SoundFiles
-    File soundZug = new File("/Users/robin/Desktop/Dame/Zug.m4a"); //kommt wenn ein Stein gespielt wird
-    Media media = new Media(soundZug.toURI().toString());
-    MediaPlayer mp3zug = new MediaPlayer(media);
-    File soundSchlagen = new File("/Users/robin/Desktop/Dame/Geschlagen.m4a"); //kommt wenn ein Stein geschlagen wird
-    Media schlag = new Media(soundSchlagen.toURI().toString());
-    MediaPlayer mp3Schlag = new MediaPlayer(schlag);
+    public Dame(Feld feld, boolean istWeiss) {
+        super(feld, istWeiss);
 
-    private boolean dame = true;
+        //Datei für ein leeres Bild ohne Stein
+        File fileBlank = new File("assets/Leer.png"); //kein Stein
 
-    //Konstruktor
-    public Dame(Feld f, boolean w) {
-        super(f, w);
+        //SoundFiles
+        File soundZug = new File("assets/Zug.m4a"); //kommt wenn ein Stein gespielt wird
+        Media media = new Media(soundZug.toURI().toString());
+        File soundSchlagen = new File("assets/Geschlagen.m4a"); //kommt wenn ein Stein geschlagen wird
+        Media schlag = new Media(soundSchlagen.toURI().toString());
+
+        this.mp3Schlag = new MediaPlayer(schlag);
+        this.mp3zug = new MediaPlayer(media);
+        this.blank = new Image(fileBlank.toURI().toString());
     }
 
     //getter Methode, ob ein Stein vom Typ Dame ist
     public boolean istDame() {
-        return dame;
+        return true;
     }
 
 
@@ -56,10 +58,10 @@ public class Dame extends Stein {
         }
     }
 
-/*
-Methode die prüft ob bei einem Zug auch ein Spielstein geschlagen wird. Hier findet ausserdem der eigentlich Schlag statt, sprich das entfernen des alten Steines
- */
-@Override
+    /*
+    Methode die prüft ob bei einem Zug auch ein Spielstein geschlagen wird. Hier findet ausserdem der eigentlich Schlag statt, sprich das entfernen des alten Steines
+     */
+    @Override
     public boolean schlagGueltig(Feld start, Feld ziel, Feld[][] felder) { //0 = false, 1= true (zug ist richtig), 2= zug richtig und geschlagen
         int deltaXB = (int) Math.sqrt(Math.pow(start.getKoord()[0] - ziel.getKoord()[0], 2)); //Betrag der differenz der koordinaten der 2 gedrückten felder
         int deltaYB = (int) Math.sqrt(Math.pow(start.getKoord()[1] - ziel.getKoord()[1], 2));
@@ -88,11 +90,12 @@ Methode die prüft ob bei einem Zug auch ein Spielstein geschlagen wird. Hier fi
             return false;
         }
     }
-/*
-Methode die zwischen zwei feldern, die anzahl an Steinen zählt. Dabei wird sowohl geschaut OB, Wie viele, und Wo Steine dazwischen liegen.
-c(0. Wie viele Steine sind dazwischen? / 1. X-Koordinate eines Steins der dazwischen liegt / 2. Y-Koordinate ein.... liegt)
-c[0]= -1 bedeutet, dass hier ein Stein der eigenen Farbe versucht wurde zu schlagen.
- */
+
+    /*
+    Methode die zwischen zwei feldern, die anzahl an Steinen zählt. Dabei wird sowohl geschaut OB, Wie viele, und Wo Steine dazwischen liegen.
+    c(0. Wie viele Steine sind dazwischen? / 1. X-Koordinate eines Steins der dazwischen liegt / 2. Y-Koordinate ein.... liegt)
+    c[0]= -1 bedeutet, dass hier ein Stein der eigenen Farbe versucht wurde zu schlagen.
+     */
     private int[] wieVieleSteineDazwischen(int deltaX, int deltaY, Feld start, Feld[][] felder) { //return c (anzahl an steinen dazwischen), wenn c=-1, dann schlag nicht gültig
         int[] c = new int[3];
         /*

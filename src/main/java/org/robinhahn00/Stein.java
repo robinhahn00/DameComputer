@@ -1,10 +1,6 @@
 package org.robinhahn00;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-
-import java.io.File;
 
 public abstract class Stein extends ImageView {
     private boolean dame;
@@ -12,12 +8,9 @@ public abstract class Stein extends ImageView {
     private boolean istWeiss;
     private Brett brett;
 
-    public Stein(Feld f, boolean w) {
-        feld = f;
-        istWeiss = w;
-        // File file = new File("/Users/robin/Desktop/Dame/White.jpg");
-        //Image image = new Image(file.toURI().toString());
-        //ImageView iv = new ImageView(image);
+    public Stein(Feld feld, boolean istWeiss) {
+        this.feld = feld;
+        this.istWeiss = istWeiss;
     }
 
     public boolean getSteinC() {

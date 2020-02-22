@@ -9,27 +9,23 @@ import java.io.File;
 
 public class Bauer extends Stein {
 
-    private boolean dame = false; //= Dieser Stein ist keine Dame!
-    //Bilder für Steine
-    File fileBlank = new File("/Users/robin/Desktop/Dame/Leer.png"); //kein Stein
-    public Image blank = new Image(fileBlank.toURI().toString());
+    private Image blank;
+    private MediaPlayer mp3Schlag;
 
-    //SoundFiles
-    File soundZug = new File("/Users/robin/Desktop/Dame/Zug.m4a"); //kommt wenn ein Stein bewegt wird
-    Media media = new Media(soundZug.toURI().toString());
-    MediaPlayer mp3zug = new MediaPlayer(media);
+    public Bauer(Feld feld, boolean istWeiss) {
+        super(feld, istWeiss);
 
-    File soundSchlagen = new File("/Users/robin/Desktop/Dame/Geschlagen.m4a"); //kommt wenn ein Stein geschlagen wird
-    Media schlag = new Media(soundSchlagen.toURI().toString());
-    MediaPlayer mp3Schlag = new MediaPlayer(schlag);
+        // TODO: dateien sollen immer relativ angegeben werden ;) d.h. einfach unter "assets" die ursprünglichen dateien ersetzen
+        File fileBlank = new File("assets/Leer.png"); //kein Stein
+        File soundSchlagen = new File("assets/Geschlagen.m4a"); //kommt wenn ein Stein geschlagen wird
+        Media schlag = new Media(soundSchlagen.toURI().toString());
 
-
-    public Bauer(Feld f, boolean w) {
-        super(f, w);
+        this.blank = new Image(fileBlank.toURI().toString());
+        this.mp3Schlag = new MediaPlayer(schlag);
     }
 
     public boolean istDame() {
-        return dame;
+        return false;
     }
 
     @Override
@@ -66,10 +62,10 @@ public class Bauer extends Stein {
         return false;//ansonsten ist der Zug ungueltig
     }
 
-/*
-Diese Methode gibt True zurück, wenn ein Bauer 2 Felder Diagonal geht, das Ziel-Feld leer ist und er auf dem Weg einen gegnerischen Spieler
-überspringt. Dieser Wird dann geschlagen.
- */
+    /*
+    Diese Methode gibt True zurück, wenn ein Bauer 2 Felder Diagonal geht, das Ziel-Feld leer ist und er auf dem Weg einen gegnerischen Spieler
+    überspringt. Dieser Wird dann geschlagen.
+     */
     public boolean schlagGueltig(Feld start, Feld ziel, Feld[][] felder) {
 
         int deltaX = (int) Math.sqrt(Math.pow(start.getKoord()[0] - ziel.getKoord()[0], 2)); //Betrag der differenz der koordinaten der 2 gedrückten felder

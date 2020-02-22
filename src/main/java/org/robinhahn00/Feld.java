@@ -1,10 +1,6 @@
 package org.robinhahn00;
 
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.*;
-
-import java.io.File;
 
 
 public class Feld extends Button {
@@ -13,7 +9,7 @@ public class Feld extends Button {
     private boolean istWeiss = false;
     private Brett brett;
     private Stein s = null;
-    
+
     private boolean gedrueckt = false; //ist das Feld gedrueckt?
 
 

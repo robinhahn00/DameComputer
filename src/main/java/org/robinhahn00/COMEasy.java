@@ -1,7 +1,6 @@
 package org.robinhahn00;
 
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 import java.io.File;
 import java.util.LinkedList;
