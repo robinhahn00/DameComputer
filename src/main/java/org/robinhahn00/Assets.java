@@ -12,8 +12,8 @@ public abstract class Assets {
     }
 
     public static final Image fieldBlank = new Image(new File("assets/Leer.png").toURI().toString());
-    public static final Image fieldWhite = new Image(new File("assets/Weiss.png").toURI().toString());
-    public static final Image fieldBlack = new Image(new File("assets/schwarz.png").toURI().toString());
+    public static final Image bauerWhite = new Image(new File("assets/WeissBauer.png").toURI().toString());
+    public static final Image bauerBlack = new Image(new File("assets/SchwarzBauer.png").toURI().toString());
     public static final Image dameWhite = new Image(new File("assets/WeissDame.png").toURI().toString());
     public static final Image dameBlack = new Image(new File("assets/SchwarzDame.png").toURI().toString());
 

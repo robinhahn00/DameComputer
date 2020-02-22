@@ -6,7 +6,6 @@ import java.util.List;
 public class COMEasy extends COM {
 
     private Brett brett;
-    private Feld[] zug = new Feld[2];
 
     private List<Stein> moeglich = new LinkedList<Stein>();
     private Feld[][] felder;
@@ -34,8 +33,7 @@ public class COMEasy extends COM {
         int min = 1;
         int range = max - min + 1;
         int rand = (int) (Math.random() * range) + min;
-        zug = returnZug(moeglich.get(rand - 1));
-        return zug;
+        return returnZug(moeglich.get(rand - 1));
     }
 
     public boolean kannErZiehen(Stein s) { //guckt ob ein stein ziehen kann oder sogar schlagen kann

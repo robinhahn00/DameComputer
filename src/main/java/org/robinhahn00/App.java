@@ -7,8 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 /**
  * JavaFX APP Dame Computer
@@ -17,14 +18,13 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-
         stage.setTitle("Dame");
 
-        BorderPane layout = new BorderPane();
-        GridPane brett = new Brett(8);
+        var layout = new BorderPane();
+        var brett = new Brett(8);
 
         layout.setCenter(brett);
-        Button reset = new Button("Reset"); //noch keine funktion
+        var reset = new Button("Reset"); //noch keine funktion
         reset.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -34,7 +34,7 @@ public class App extends Application {
         });
         layout.setLeft(reset);
         var scene = new Scene(layout, 640, 480);
-        TextField f = new TextField("Schlag den Computer... Wenn du es schaffst ;)");
+        var f = new TextField("Schlag den Computer... Wenn du es schaffst ;)");
         layout.setTop(f);
         stage.setScene(scene);
         stage.show();

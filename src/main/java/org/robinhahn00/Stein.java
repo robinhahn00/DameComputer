@@ -3,6 +3,7 @@ package org.robinhahn00;
 import javafx.scene.image.ImageView;
 
 public abstract class Stein extends ImageView {
+
     private boolean dame;
     private Feld feld;
     private boolean istWeiss;

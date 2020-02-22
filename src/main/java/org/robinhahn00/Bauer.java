@@ -1,11 +1,6 @@
 package org.robinhahn00;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-
-import java.io.File;
 
 public class Bauer extends Stein {
 

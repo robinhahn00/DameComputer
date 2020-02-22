@@ -20,6 +20,7 @@ public class Brett extends GridPane {
     public Brett(int s) {
         size = s;
         computer = new COMEasy(this);
+        initializeBoard();
     }
 
     private void initializeBoard() {
@@ -27,7 +28,7 @@ public class Brett extends GridPane {
         setHgap(8);
         setVgap(8);
 
-        felder = getButton(this);
+        felder = getButton();
         for (int i = 0; i < size; i++) {
             for (int i2 = 0; i2 < size; i2++) {
                 if (felder[i][i2] != null) {
@@ -43,12 +44,12 @@ public class Brett extends GridPane {
                         if (i2 < (size / 2) - 1) { //weiße steine
                             felder[i][i2].setStein(new Bauer(felder[i][i2], true));
 
-                            felder[i][i2].setGraphic(new ImageView(Assets.fieldWhite));
+                            felder[i][i2].setGraphic(new ImageView(Assets.bauerWhite));
 
                         } else if (i2 > size / 2) { //schwarze steine
                             felder[i][i2].setStein(new Bauer(felder[i][i2], false));
 
-                            felder[i][i2].setGraphic(new ImageView(Assets.fieldBlack));
+                            felder[i][i2].setGraphic(new ImageView(Assets.bauerBlack));
                         } else {
                             felder[i][i2].setGraphic(new ImageView(Assets.fieldBlank));
 
@@ -61,7 +62,7 @@ public class Brett extends GridPane {
         }
     }
 
-    private Feld[][] getButton(Brett b) {
+    private Feld[][] getButton() {
         Feld[][] spielfeld = new Feld[8][8];
         //Raster Erzeugen
         for (int i = 0; i < 8; i++) {
@@ -69,9 +70,9 @@ public class Brett extends GridPane {
                 Feld field;
                 //wenn die felder-koordinaten beide ungerde oder grade sind dann weiss
                 if ((i % 2 == 0 && i2 % 2 == 0) || (i % 2 == 1 && i2 % 2 == 1)) {  //=gleich also weiß
-                    field = new Feld(b, true);
+                    field = new Feld(this, true);
                 } else { //nicht gleich also schwarz
-                    field = new Feld(b, false);
+                    field = new Feld(this, false);
                 }
                 spielfeld[i][i2] = field;
 
@@ -81,78 +82,72 @@ public class Brett extends GridPane {
         return spielfeld;
     } //erzeugen der felder in brett b
 
-    private void enableButton(Feld f) {
-
-        f.setOnAction(new EventHandler<ActionEvent>() {
+    private void enableButton(Feld feld) {
+        feld.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent e) {
-
-
-                if (weissAnDerReihe) {
-                    if (f != feldGedrueckt) {
-                        if (!f.getGedrueckt()) {
+                if (!weissAnDerReihe) {
+                    comIstDran();
+                } else {
+                    if (feld == feldGedrueckt) {
+                        releaseButton(feld);
+                    } else {
+                        if (!feld.getGedrueckt()) {
                             DropShadow shadow = new DropShadow();
-                            f.setEffect(shadow);
-                            f.setGedrueckt(true);
+                            feld.setEffect(shadow);
+                            feld.setGedrueckt(true);
                             if (feldGedrueckt != null) {
                                 //speicher alten stein ab
                                 if (feldGedrueckt.getStein() != null) {
                                     if (feldGedrueckt.getStein().getSteinC() == weissAnDerReihe) {
-                                        if (!mussGeschlagenWerden(feldGedrueckt, f)) { //gucken ob kein anderer stein geschlagen werden muss
-
-
-                                            zug(f);
+                                        if (!mussGeschlagenWerden(feldGedrueckt, feld)) { //gucken ob kein anderer stein geschlagen werden muss
+                                            zug(feld);
 
                                         } else {
                                             releaseButton(feldGedrueckt);
-                                            releaseButton(f);
+                                            releaseButton(feld);
                                         }
                                     } else {
                                         releaseButton(feldGedrueckt);
-                                        releaseButton(f);
+                                        releaseButton(feld);
                                     }
                                 }
                             } else {
-                                feldGedrueckt = f;
+                                feldGedrueckt = feld;
                             }
-
-
                         } else {
-                            releaseButton(f);
+                            releaseButton(feld);
                             releaseButton(feldGedrueckt);
                         }
 
-                    } else {
-                        releaseButton(f);
-
                     }
-                } else {
-                    comIstDran();
                 }
             }
         });
-
-
     }
 
     private void comIstDran() {
-        if (!weissAnDerReihe) { //computer ist dran
-
-            Feld[] comZug = computer.ziehe();
-            Feld start = comZug[0];
-            Feld ziel = comZug[1];
-            feldGedrueckt = start;
-
-            zug(ziel); //zug des COMs
+        if (weissAnDerReihe) {
+            return;
         }
+
+        //computer ist dran
+        Feld[] comZug = computer.ziehe();
+        Feld start = comZug[0];
+        Feld ziel = comZug[1];
+        feldGedrueckt = start;
+
+        zug(ziel); //zug des COMs
     }
 
     private void releaseButton(Feld f) {
-        if (f != null) {
-            f.setEffect(null);
-            f.setGedrueckt(false);
-            feldGedrueckt = null;
+        if (f == null) {
+            return;
         }
+
+        f.setEffect(null);
+        f.setGedrueckt(false);
+        feldGedrueckt = null;
     }
 
     public Feld[][] getFelderArray() {
@@ -173,45 +168,40 @@ public class Brett extends GridPane {
     }
 
 
-    public void zug(Feld f) {
+    public void zug(Feld feld) {
         if (feldGedrueckt.getStein() != null) {
-            if (feldGedrueckt.getStein().zugGueltig(feldGedrueckt, f, felder)) {
+            if (feldGedrueckt.getStein().zugGueltig(feldGedrueckt, feld, felder)) {
                 if (!wurdeGeschlagen) {
-                    if (weissAnDerReihe) {
-                        weissAnDerReihe = false;
-                    } else {
-                        weissAnDerReihe = true;
-                    }
-                } else {
-                    //mit dem einem stein darf noch weiter geschlagen werden falls möglich
-                }
+                    weissAnDerReihe = !weissAnDerReihe;
+                }  //mit dem einem stein darf noch weiter geschlagen werden falls möglich
+
                 wurdeGeschlagen = false;
 
-                f.setGraphic(feldGedrueckt.getGraphic());
+                feld.setGraphic(feldGedrueckt.getGraphic());
                 //gucken ob stein zur dame wird
                 boolean bauerZuDame = false; //wenn der Bauer zur Dame wird, soll er nicht den Typ Stein des Vorgänger-Feldes annehmen
 
                 if (feldGedrueckt.getStein().getSteinC()) {
 
-                    if (f.getKoord()[1] == size - 1) {
+                    if (feld.getKoord()[1] == size - 1) {
                         //dame
                         bauerZuDame = true;
-                        f.setStein(null);
-                        f.setStein(new Dame(f, true));
-                        f.getStein().setDame();
+                        feld.setStein(null);
+                        feld.setStein(new Dame(feld, true));
+                        feld.getStein().setDame();
 
-                        f.setGraphic(new ImageView(Assets.dameWhite));
+                        feld.setGraphic(new ImageView(Assets.dameWhite));
                     }
                 } else {
 
-                    if (f.getKoord()[1] == 0) {
+                    if (feld.getKoord()[1] == 0) {
                         //dame
                         bauerZuDame = true;
-                        f.setStein(null);
-                        f.setStein(new Dame(f, false));
-                        f.getStein().setDame();
+                        feld.setStein(null);
+                        feld.setStein(new Dame(feld, false));
+                        feld.getStein().setDame();
 
-                        f.setGraphic(new ImageView(Assets.dameBlack));
+                        feld.setGraphic(new ImageView(Assets.dameBlack));
                     }
                 }
 
@@ -220,9 +210,9 @@ public class Brett extends GridPane {
                 if (!bauerZuDame) {
 
                     if (feldGedrueckt.getStein().istDame()) {
-                        f.setStein(new Dame(f, feldGedrueckt.getStein().getSteinC()));
+                        feld.setStein(new Dame(feld, feldGedrueckt.getStein().getSteinC()));
                     } else {
-                        f.setStein(new Bauer(f, feldGedrueckt.getStein().getSteinC()));
+                        feld.setStein(new Bauer(feld, feldGedrueckt.getStein().getSteinC()));
                     }
                 }
                 feldGedrueckt.setGraphic(new ImageView(Assets.fieldBlank)); //stein von altem feld löschen
@@ -230,7 +220,7 @@ public class Brett extends GridPane {
             }
         }
         releaseButton(feldGedrueckt);
-        releaseButton(f);
+        releaseButton(feld);
 
     }
 
@@ -296,10 +286,7 @@ public class Brett extends GridPane {
 
             }
         }
-        if (c > 0) {
-            return true;
-        }
-        return false;
+        return c > 0;
     }
 
     public void setWurdeGradeGeschlagen(boolean b) { //wenn geschlagen wurde, und noch ein schlag möglich ist, dann muss man nochmal ziehen

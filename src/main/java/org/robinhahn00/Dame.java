@@ -53,7 +53,7 @@ public class Dame extends Stein {
                 int[] opferKoords = new int[2];
                 opferKoords[0] = start.getKoord()[0] + c[1];
                 opferKoords[1] = start.getKoord()[1] + c[2];
-                felder[opferKoords[0]][opferKoords[1]].setGraphic(new ImageView(Assets.fieldWhite));//der Stein ist ab hier nicht mehr sichtbar
+                felder[opferKoords[0]][opferKoords[1]].setGraphic(new ImageView(Assets.bauerWhite));//der Stein ist ab hier nicht mehr sichtbar
                 felder[opferKoords[0]][opferKoords[1]].setStein(null); //und ab hier auch nicht mehr im spiel. Das Feld ist wieder frei
 
                 return true;

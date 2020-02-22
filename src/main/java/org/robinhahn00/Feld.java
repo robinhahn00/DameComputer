@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 public class Feld extends Button {
     //Das Feld ist ein Button der gedrückt werden kann. Steine stehen auf einem Feld
     private int[] xy = new int[2];
-    private boolean istWeiss = false;
+    private boolean istWeiss;
     private Brett brett;
     private Stein s = null;
 
