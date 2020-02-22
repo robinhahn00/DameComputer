@@ -21,7 +21,7 @@ public class App extends Application {
         stage.setTitle("Dame");
 
         BorderPane layout = new BorderPane();
-        GridPane brett = new Brett(8).getBrett();
+        GridPane brett = new Brett(8);
 
         layout.setCenter(brett);
         Button reset = new Button("Reset"); //noch keine funktion

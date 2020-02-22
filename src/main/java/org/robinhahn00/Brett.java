@@ -4,55 +4,28 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
-import java.io.File;
-
 public class Brett extends GridPane {
 
-    int size;
-    Feld[][] felder = new Feld[size][size];
-    Brett brett;
-    int anzahlWeisseSteine; //wenn einer gleich 0, dann spiel vorbei
-    int anzahlSchwarzeSteine;
-    boolean wurdeGeschlagen = false; //wurde im letzten zug geschlagen?
-    COM computer;
+    private int size;
+    private Feld[][] felder = new Feld[size][size];
+    private Feld feldGedrueckt; // welches Feld wurde gedrückt
 
-    boolean weissAnDerReihe = true; //die spieler müssen abwechselnd ziehen
-    Feld feldGedrueckt = null; //welches Feld wurde gedrückt
+    private COM computer;
+    private boolean wurdeGeschlagen = false; // wurde im letzten zug geschlagen?
+    private boolean weissAnDerReihe = true; // die spieler müssen abwechselnd ziehen
 
-
-    //verschiedenen Bilder für die Steine
-    File fileBlank = new File("/Users/robin/Desktop/Dame/Leer.png"); //kein Stein
-    public Image blank = new Image(fileBlank.toURI().toString());
-
-    File fileWeiss = new File("/Users/robin/Desktop/Dame/Weiss.png");
-    public Image weiss = new Image(fileWeiss.toURI().toString());
-
-    File fileSchwarz = new File("/Users/robin/Desktop/Dame/schwarz.png");
-    public Image schwarz = new Image(fileSchwarz.toURI().toString());
-
-    File fileWeissDame = new File("/Users/robin/Desktop/Dame/WeissDame.png");
-    public Image weissDame = new Image(fileWeissDame.toURI().toString());
-
-    File fileSchwarzDame = new File("/Users/robin/Desktop/Dame/SchwarzDame.png");
-    public Image schwarzDame = new Image(fileSchwarzDame.toURI().toString());
-
-    // Konstruktor
     public Brett(int s) {
         size = s;
-        brett = this;
-
-
+        computer = new COMEasy(this);
     }
 
-    public Brett getBrett() {
-        brett = new Brett(size);
-        brett.setPadding(new Insets(10, 10, 10, 10));
-        brett.setHgap(8);
-        brett.setVgap(8);
+    private void initializeBoard() {
+        setPadding(new Insets(10, 10, 10, 10));
+        setHgap(8);
+        setVgap(8);
 
         felder = getButton(this);
         for (int i = 0; i < size; i++) {
@@ -62,22 +35,22 @@ public class Brett extends GridPane {
                     felder[i][i2].setKoord(i, i2);
 
                     GridPane.setConstraints(b, i, i2);
-                    brett.getChildren().add(b);
+                    getChildren().add(b);
 
                     if (!felder[i][i2].getColour()) { //weiss
-                        felder[i][i2].setGraphic(new ImageView(blank));
+                        felder[i][i2].setGraphic(new ImageView(Assets.fieldBlank));
                     } else { //schwarzes feld
                         if (i2 < (size / 2) - 1) { //weiße steine
                             felder[i][i2].setStein(new Bauer(felder[i][i2], true));
 
-                            felder[i][i2].setGraphic(new ImageView(weiss));
+                            felder[i][i2].setGraphic(new ImageView(Assets.fieldWhite));
 
                         } else if (i2 > size / 2) { //schwarze steine
                             felder[i][i2].setStein(new Bauer(felder[i][i2], false));
 
-                            felder[i][i2].setGraphic(new ImageView(schwarz));
+                            felder[i][i2].setGraphic(new ImageView(Assets.fieldBlack));
                         } else {
-                            felder[i][i2].setGraphic(new ImageView(blank));
+                            felder[i][i2].setGraphic(new ImageView(Assets.fieldBlank));
 
 
                         }
@@ -86,17 +59,9 @@ public class Brett extends GridPane {
                 }
             }
         }
-        anzahlWeisseSteine = countSteine(); //wenn einer gleich 0, dann spiel vorbei
-        int anzahlSchwarzeSteine = anzahlWeisseSteine;
-        computer = new COMEasy(this);
-
-
-        return brett;
-
-    } //erzeugen des brettes der größe s
+    }
 
     private Feld[][] getButton(Brett b) {
-
         Feld[][] spielfeld = new Feld[8][8];
         //Raster Erzeugen
         for (int i = 0; i < 8; i++) {
@@ -235,7 +200,7 @@ public class Brett extends GridPane {
                         f.setStein(new Dame(f, true));
                         f.getStein().setDame();
 
-                        f.setGraphic(new ImageView(weissDame));
+                        f.setGraphic(new ImageView(Assets.dameWhite));
                     }
                 } else {
 
@@ -246,7 +211,7 @@ public class Brett extends GridPane {
                         f.setStein(new Dame(f, false));
                         f.getStein().setDame();
 
-                        f.setGraphic(new ImageView(schwarzDame));
+                        f.setGraphic(new ImageView(Assets.dameBlack));
                     }
                 }
 
@@ -260,7 +225,7 @@ public class Brett extends GridPane {
                         f.setStein(new Bauer(f, feldGedrueckt.getStein().getSteinC()));
                     }
                 }
-                feldGedrueckt.setGraphic(new ImageView(blank)); //stein von altem feld löschen
+                feldGedrueckt.setGraphic(new ImageView(Assets.fieldBlank)); //stein von altem feld löschen
                 feldGedrueckt.setStein(null);
             }
         }

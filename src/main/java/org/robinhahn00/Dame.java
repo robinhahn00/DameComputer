@@ -1,40 +1,17 @@
 package org.robinhahn00;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-
-import java.io.File;
 
 public class Dame extends Stein {
 
-    private Image blank;
-    private MediaPlayer mp3zug;
-    private MediaPlayer mp3Schlag;
-
     public Dame(Feld feld, boolean istWeiss) {
         super(feld, istWeiss);
-
-        //Datei für ein leeres Bild ohne Stein
-        File fileBlank = new File("assets/Leer.png"); //kein Stein
-
-        //SoundFiles
-        File soundZug = new File("assets/Zug.m4a"); //kommt wenn ein Stein gespielt wird
-        Media media = new Media(soundZug.toURI().toString());
-        File soundSchlagen = new File("assets/Geschlagen.m4a"); //kommt wenn ein Stein geschlagen wird
-        Media schlag = new Media(soundSchlagen.toURI().toString());
-
-        this.mp3Schlag = new MediaPlayer(schlag);
-        this.mp3zug = new MediaPlayer(media);
-        this.blank = new Image(fileBlank.toURI().toString());
     }
 
     //getter Methode, ob ein Stein vom Typ Dame ist
     public boolean istDame() {
         return true;
     }
-
 
     //Methode die Prüft ob ein Zug, so wie er geplant ist, regelkonform ist
     @Override
@@ -72,16 +49,16 @@ public class Dame extends Stein {
             int[] c = wieVieleSteineDazwischen(deltaX, deltaY, start, felder); //counter [0] wie viele Steine (gegnerische) zwischen dem Weg von start zu ziel liegen und [1] an welcher x stelle und an welcher [2] y stelle
 
             if (c[0] == 1) { //wenn nur ein stein dazwischen liegt dann ist der schlag gültig
-                mp3Schlag.play();
+                Assets.mp3Schlag.play();
                 int[] opferKoords = new int[2];
                 opferKoords[0] = start.getKoord()[0] + c[1];
                 opferKoords[1] = start.getKoord()[1] + c[2];
-                felder[opferKoords[0]][opferKoords[1]].setGraphic(new ImageView(blank));//der Stein ist ab hier nicht mehr sichtbar
+                felder[opferKoords[0]][opferKoords[1]].setGraphic(new ImageView(Assets.fieldWhite));//der Stein ist ab hier nicht mehr sichtbar
                 felder[opferKoords[0]][opferKoords[1]].setStein(null); //und ab hier auch nicht mehr im spiel. Das Feld ist wieder frei
 
                 return true;
             } else if (c[0] == 0) { //zug gueltig aber kein schlag
-                mp3zug.play();
+                Assets.mp3Zug.play();
                 return true;
             } else { //zug nicht gueltig, da mehrere gegnerische Steine oder ein eigener zwischen start und ziel liegen
                 return false;

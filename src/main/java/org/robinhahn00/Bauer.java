@@ -9,19 +9,9 @@ import java.io.File;
 
 public class Bauer extends Stein {
 
-    private Image blank;
-    private MediaPlayer mp3Schlag;
 
     public Bauer(Feld feld, boolean istWeiss) {
         super(feld, istWeiss);
-
-        // TODO: dateien sollen immer relativ angegeben werden ;) d.h. einfach unter "assets" die ursprünglichen dateien ersetzen
-        File fileBlank = new File("assets/Leer.png"); //kein Stein
-        File soundSchlagen = new File("assets/Geschlagen.m4a"); //kommt wenn ein Stein geschlagen wird
-        Media schlag = new Media(soundSchlagen.toURI().toString());
-
-        this.blank = new Image(fileBlank.toURI().toString());
-        this.mp3Schlag = new MediaPlayer(schlag);
     }
 
     public boolean istDame() {
@@ -82,8 +72,8 @@ public class Bauer extends Stein {
                 if (start.getStein() != null) { //gibt es überhaupt einen Stein der den Weg gehen möchte? oder ist das Start-Feld leer?
                     if (felder[opferKoords[0]][opferKoords[1]].getStein().getSteinC() != start.getStein().getSteinC()) { //versucht hier jemand seinen eigenen Stein zu schlagen?
                         //hier wird der eigentliche schlag ausgeführt
-                        mp3Schlag.play();
-                        felder[opferKoords[0]][opferKoords[1]].setGraphic(new ImageView(blank));  //das Bild wird entfernt
+                        Assets.mp3Schlag.play();
+                        felder[opferKoords[0]][opferKoords[1]].setGraphic(new ImageView(Assets.fieldBlank));  //das Bild wird entfernt
                         felder[opferKoords[0]][opferKoords[1]].setStein(null);// der Stein wird gelöscht
                         start.getBrettItsOn().setWurdeGradeGeschlagen(true); //dem Spiel wird gesagt, dass grade geschlagen wurde. Falls der Spieler
                         //mit dem selben Stein noch einen weiteren gegnerischen Stein schlagen kann, so muss er das auch noch tun! So sind die Regeln!

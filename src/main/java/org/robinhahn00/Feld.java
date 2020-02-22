@@ -12,12 +12,10 @@ public class Feld extends Button {
 
     private boolean gedrueckt = false; //ist das Feld gedrueckt?
 
+    public Feld(Brett brett, boolean w) {
+        this.brett = brett;
+        this.istWeiss = w;
 
-    public Feld(Brett b, boolean w) {
-
-
-        brett = b;
-        istWeiss = w;
         if (w) {
             this.setStyle("-fx-background-color: #000000"); //weiss
         } else {
