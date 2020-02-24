@@ -245,6 +245,7 @@ public class Brett extends GridPane {
                         feld.setGraphic(new ImageView(Assets.dameBlack));
                     }
                 }
+                //hier mehrfach schlagen überprüfen
                 if (wurdeGeschlagen) {
                     weiterZiehen(feld); //wer zieht als nächstes?
                 } else {  //mit dem einem stein darf noch weiter geschlagen werden falls möglich
