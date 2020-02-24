@@ -11,6 +11,7 @@ public abstract class Stein extends ImageView {
 
     public Stein(Feld feld, boolean istWeiss) {
         this.feld = feld;
+        brett = feld.getBrettItsOn();
         this.istWeiss = istWeiss;
     }
 

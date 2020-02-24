@@ -26,6 +26,7 @@ public class Dame extends Stein {
             } else { //das Feld ist frei? Dann prüfe ob der Zug gueltig ist oder ob sogar ein stein geschlagen wird
 
                 if (schlagGueltig(start, ziel, felder)) { //wird bei dem zug ein stein geschlagen oder klappt der zug überhaupt
+
                     return true;//gueltig
                 }
                 return false;//ungueltig
@@ -55,7 +56,7 @@ public class Dame extends Stein {
                 opferKoords[1] = start.getKoord()[1] + c[2];
                 felder[opferKoords[0]][opferKoords[1]].setGraphic(new ImageView(Assets.bauerWhite));//der Stein ist ab hier nicht mehr sichtbar
                 felder[opferKoords[0]][opferKoords[1]].setStein(null); //und ab hier auch nicht mehr im spiel. Das Feld ist wieder frei
-
+                super.getBrett().setWurdeGradeGeschlagen(true);
                 return true;
             } else if (c[0] == 0) { //zug gueltig aber kein schlag
                 Assets.mp3Zug.play();

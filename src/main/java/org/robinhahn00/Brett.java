@@ -13,7 +13,7 @@ import java.util.Random;
 public class Brett extends GridPane {
 
     public interface PlayerChangedListener {
-        public void onPlayherChanged(boolean weissAnDerReihe);
+        public void onPlayerChanged(boolean weissAnDerReihe);
     }
 
     private int size;
@@ -166,20 +166,18 @@ public class Brett extends GridPane {
         Feld ziel = comZug[1];
         feldGedrueckt = start;
 
-        // separate non-FX thread
+        //  non-FX thread
         new Thread(() -> {
             try {
-                // imitating guess work between 0 and 2 seconds
-                Thread.sleep(new Random().nextInt(2000));
+                // imitating guess work between 0 and 1 seconds
+                Thread.sleep(new Random().nextInt(500));
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
             Platform.runLater(() -> {
                 zug(ziel);
                 // computer darf ggf. öfter ziehen.
-                if (!weissAnDerReihe) {
-                    computerZug();
-                }
+
             });
 
         }).start();
@@ -214,23 +212,19 @@ public class Brett extends GridPane {
     }
 
 
-    public void zug(Feld feld) {
+    public void zug(Feld feld) { //feld = ziel
         var originWeissAnDerReihe = weissAnDerReihe;
         if (feldGedrueckt.getStein() != null) {
             if (feldGedrueckt.getStein().zugGueltig(feldGedrueckt, feld, felder)) {
-                if (!wurdeGeschlagen) {
-                    weissAnDerReihe = !weissAnDerReihe;
-                }  //mit dem einem stein darf noch weiter geschlagen werden falls möglich
 
-                wurdeGeschlagen = false;
 
                 feld.setGraphic(feldGedrueckt.getGraphic());
                 //gucken ob stein zur dame wird
                 boolean bauerZuDame = false; //wenn der Bauer zur Dame wird, soll er nicht den Typ Stein des Vorgänger-Feldes annehmen
 
-                if (feldGedrueckt.getStein().getSteinC()) {
+                if (feldGedrueckt.getStein().getSteinC()) { //weiss
 
-                    if (feld.getKoord()[1] == size - 1) {
+                    if (feld.getKoord()[1] == size - 1) { //ist der stein einmal über das ganze feld und wird somit zur dame?
                         //dame
                         bauerZuDame = true;
                         feld.setStein(null);
@@ -239,9 +233,9 @@ public class Brett extends GridPane {
 
                         feld.setGraphic(new ImageView(Assets.dameWhite));
                     }
-                } else {
+                } else { //schwarz
 
-                    if (feld.getKoord()[1] == 0) {
+                    if (feld.getKoord()[1] == 0) {//ist der stein einmal über das ganze feld und wird somit zur dame?
                         //dame
                         bauerZuDame = true;
                         feld.setStein(null);
@@ -251,6 +245,12 @@ public class Brett extends GridPane {
                         feld.setGraphic(new ImageView(Assets.dameBlack));
                     }
                 }
+                if (wurdeGeschlagen) {
+                    weiterZiehen(feld); //wer zieht als nächstes?
+                } else {  //mit dem einem stein darf noch weiter geschlagen werden falls möglich
+                    weissAnDerReihe = !weissAnDerReihe;
+                }
+                wurdeGeschlagen = false;
 
 
                 //stein auf neuem feld erzeugen
@@ -268,10 +268,70 @@ public class Brett extends GridPane {
         }
 
         if (playerChangedListener != null && weissAnDerReihe != originWeissAnDerReihe) {
-            playerChangedListener.onPlayherChanged(weissAnDerReihe);
+            playerChangedListener.onPlayerChanged(weissAnDerReihe);
         }
         releaseButton(feldGedrueckt);
         releaseButton(feld);
+    }
+
+    private void weiterZiehen(Feld f) {
+        if(f.getStein()==null){
+            return;
+        }
+        Stein s = f.getStein(); //der stein der gezogen hat
+        int x = s.getFeld().getKoord()[0];
+        int y = s.getFeld().getKoord()[1];
+        boolean weiter = false; //geht noch eins schlag?
+        if (s.istDame()) { //dame
+
+        } else { //bauer
+            if (s.getSteinC()) {
+                if (y - 2 >= 0) {
+                    if (x + 2 < size) {
+                        if (felder[x + 1][y - 1].getStein() != null && !felder[x + 1][y + 1].getStein().getSteinC()) {
+                            if (felder[x + 2][y - 2].getStein() == null) {
+                                weiter = true;
+                            }
+                        }
+                    }
+                    if (x - 2 >= 0) {
+                        if (felder[x - 1][y - 1].getStein() != null && !felder[x - 1][y + 1].getStein().getSteinC()) {
+                            if (felder[x - 2][y - 2].getStein() == null) {
+                                weiter = true;
+                            }
+                        }
+                    }
+                }
+
+            } else {
+                if (y + 2 < size) {
+                    if (x + 2 < size) {
+                        if (felder[x + 1][y + 1].getStein() != null && !felder[x + 1][y + 1].getStein().getSteinC()) {
+                            if (felder[x + 2][y + 2].getStein() == null) {
+                                weiter = true;
+
+                            }
+                        }
+                    }
+                    if (x - 2 >= 0) {
+                        if (felder[x - 1][y + 1].getStein() != null && !felder[x - 1][y + 1].getStein().getSteinC()) {
+                            if (felder[x - 2][y + 2].getStein() == null) {
+                                weiter = true;
+                            }
+                        }
+                    }
+                }
+
+            }
+            System.out.println(weiter);
+            if (weiter) {
+                //
+            } else {
+                weissAnDerReihe = !weissAnDerReihe;
+            }
+        }
+
+
     }
 
     private boolean mussGeschlagenWerden(Feld eingabeStart, Feld eingabeZiel) { //true= anstelle des zuges muss ein anderer gemacht werden

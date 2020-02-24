@@ -68,6 +68,7 @@ public class Bauer extends Stein {
                     if (felder[opferKoords[0]][opferKoords[1]].getStein().getSteinC() != start.getStein().getSteinC()) { //versucht hier jemand seinen eigenen Stein zu schlagen?
                         //hier wird der eigentliche schlag ausgeführt
                         Assets.mp3Schlag.play();
+                        super.getBrett().setWurdeGradeGeschlagen(true);
                         felder[opferKoords[0]][opferKoords[1]].setGraphic(new ImageView(Assets.fieldBlank));  //das Bild wird entfernt
                         felder[opferKoords[0]][opferKoords[1]].setStein(null);// der Stein wird gelöscht
                         start.getBrettItsOn().setWurdeGradeGeschlagen(true); //dem Spiel wird gesagt, dass grade geschlagen wurde. Falls der Spieler

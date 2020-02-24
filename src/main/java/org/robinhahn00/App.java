@@ -37,7 +37,7 @@ public class App extends Application {
 
         brett.setPlayerChangedListener(new Brett.PlayerChangedListener() {
             @Override
-            public void onPlayherChanged(boolean weissAnDerReihe) {
+            public void onPlayerChanged(boolean weissAnDerReihe) {
                 if (weissAnDerReihe) {
                     f.setText("Spieler weiß ist dran");
                 } else {
