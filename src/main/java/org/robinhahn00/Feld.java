@@ -1,27 +1,21 @@
 package org.robinhahn00;
 
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.*;
-
-import java.io.File;
 
 
 public class Feld extends Button {
     //Das Feld ist ein Button der gedrückt werden kann. Steine stehen auf einem Feld
     private int[] xy = new int[2];
-    private boolean istWeiss = false;
+    private boolean istWeiss;
     private Brett brett;
-    private Stein s = null; //null=leer
+    private Stein s = null;
 
     private boolean gedrueckt = false; //ist das Feld gedrueckt?
 
+    public Feld(Brett brett, boolean w) {
+        this.brett = brett;
+        this.istWeiss = w;
 
-    public Feld(Brett b, boolean w) {
-
-
-        brett = b;
-        istWeiss = w;
         if (w) {
             this.setStyle("-fx-background-color: #000000"); //weiss
         } else {
@@ -29,36 +23,36 @@ public class Feld extends Button {
         }
     }
 
-    public int[] getKoord() { //gibt Koordinaten aus
+    public int[] getKoord() {
         return xy;
     }
 
-    public void setKoord(int x, int y) { //legt die koordinaten fest
+    public void setKoord(int x, int y) {
         xy[0] = x;
         xy[1] = y;
     }
 
-    public void setStein(Stein s) { //setzt Stein s auf ein feld
+    public void setStein(Stein s) {
         this.s = s;
     }
 
-    public Stein getStein() { //welcher Stein ist auf dem Feld? Wenn null returnt wird ist das Feld leer
+    public Stein getStein() {
         return s;
     }
 
-    public boolean getColour() { //true= weiss, false=schwarz
+    public boolean getColour() {
         return istWeiss;
     }
 
-    public boolean getGedrueckt() { //ist das Feld aktuell gedrueckt?
+    public boolean getGedrueckt() {
         return gedrueckt;
     }
 
-    public void setGedrueckt(boolean b) { //markiere das Feld als gedrueckt
+    public void setGedrueckt(boolean b) {
         gedrueckt = b;
     }
 
-    public Brett getBrettItsOn() { //auf welchem Brett ist das Feld?
+    public Brett getBrettItsOn() {
         return brett;
     }
 }

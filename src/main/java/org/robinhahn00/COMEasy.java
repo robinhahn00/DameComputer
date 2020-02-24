@@ -1,32 +1,19 @@
 package org.robinhahn00;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
-import java.io.File;
 import java.util.LinkedList;
+import java.util.List;
 
-public class COMEasy extends COM { //COMEasy erbt von COM
+public class COMEasy extends COM {
 
-    File fileBlank = new File("/Users/robin/Desktop/Dame/Leer.png"); //kein Stein
-    public Image blank = new Image(fileBlank.toURI().toString());
+    private Brett brett;
 
-    Feld[] zug = new Feld[2]; //das ist der Zug den der Computer spielt. zug[0]=start-feld; zug[1]=ziel-feld
-    Brett brett;
+    private List<Stein> moeglich = new LinkedList<Stein>();
+    private Feld[][] felder;
 
-
-    LinkedList<Stein> möglich = new LinkedList<Stein>(); //eine Liste aller Steine, die sich aktuell bewegen könnten
-    Feld[][] felder; //die Felder/Buttons des Spiels auf dem die Steine stehen. Durch die Besetzung dieser Felder entscheider
-    //der Computer wie er ziehen soll.
-
-    public COMEasy(Brett b) { //Konstruktor der nur das Brett übergeben bekommt
-        brett = b;
-
+    public COMEasy(Brett brett) {
+        this.brett = brett;
     }
 
-    //Methode die in der Klasse Brett aufgerufen wird um den Zug des COM einzuleiten. Das Feld[] wird zurück gegeben
-    // wobei hier der [0] Startpunkt und das [1] Ziel gespeichert werden
-    @Override
     public Feld[] ziehe() {
         felder = brett.getFelderArray();
         for (int i = 0; i < felder.length; i++) {
@@ -35,19 +22,18 @@ public class COMEasy extends COM { //COMEasy erbt von COM
                 if (stein != null) {
                     if (!stein.getSteinC()) { //also schwarzer stein der ggf gespielt werden kann
                         if (kannErZiehen(stein)) {
-                            möglich.add(stein);
+                            moeglich.add(stein);
                         }
                     }
                 }
             }
         }
         //aus welchen Zahlen soll zufällig gewählt werden
-        int max = möglich.size();
+        int max = moeglich.size();
         int min = 1;
         int range = max - min + 1;
         int rand = (int) (Math.random() * range) + min;
-        zug = returnZug(möglich.get(rand - 1));
-        return zug;
+        return returnZug(moeglich.get(rand - 1));
     }
 
     public boolean kannErZiehen(Stein s) { //guckt ob ein stein ziehen kann oder sogar schlagen kann

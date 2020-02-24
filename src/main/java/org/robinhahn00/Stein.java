@@ -1,21 +1,17 @@
 package org.robinhahn00;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-
-import java.io.File;
 
 public abstract class Stein extends ImageView {
-    private boolean dame; //Ist der Stein eine Dame?
-    private Feld feld; //Auf welchem Feld befindet sich der Stein?
-    private boolean istWeiss; //Ist der Stein Weiss?
-    private Brett brett; //Auf welchem Brett befindet sich der Stein?
 
-    public Stein(Feld f, boolean w) {
-        feld = f;
-        istWeiss = w;
+    private boolean dame;
+    private Feld feld;
+    private boolean istWeiss;
+    private Brett brett;
 
+    public Stein(Feld feld, boolean istWeiss) {
+        this.feld = feld;
+        this.istWeiss = istWeiss;
     }
 
     public boolean getSteinC() {
