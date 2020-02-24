@@ -1,38 +1,17 @@
 package org.robinhahn00;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-
-import java.io.File;
 
 public class Dame extends Stein {
 
-    //Datei für ein leeres Bild ohne Stein
-    File fileBlank = new File("/Users/robin/Desktop/Dame/Leer.png"); //kein Stein
-    public Image blank = new Image(fileBlank.toURI().toString());
-
-    //SoundFiles
-    File soundZug = new File("/Users/robin/Desktop/Dame/Zug.m4a"); //kommt wenn ein Stein gespielt wird
-    Media media = new Media(soundZug.toURI().toString());
-    MediaPlayer mp3zug = new MediaPlayer(media);
-    File soundSchlagen = new File("/Users/robin/Desktop/Dame/Geschlagen.m4a"); //kommt wenn ein Stein geschlagen wird
-    Media schlag = new Media(soundSchlagen.toURI().toString());
-    MediaPlayer mp3Schlag = new MediaPlayer(schlag);
-
-    private boolean dame = true;
-
-    //Konstruktor
-    public Dame(Feld f, boolean w) {
-        super(f, w);
+    public Dame(Feld feld, boolean istWeiss) {
+        super(feld, istWeiss);
     }
 
     //getter Methode, ob ein Stein vom Typ Dame ist
     public boolean istDame() {
-        return dame;
+        return true;
     }
-
 
     //Methode die Prüft ob ein Zug, so wie er geplant ist, regelkonform ist
     @Override
@@ -56,10 +35,10 @@ public class Dame extends Stein {
         }
     }
 
-/*
-Methode die prüft ob bei einem Zug auch ein Spielstein geschlagen wird. Hier findet ausserdem der eigentlich Schlag statt, sprich das entfernen des alten Steines
- */
-@Override
+    /*
+    Methode die prüft ob bei einem Zug auch ein Spielstein geschlagen wird. Hier findet ausserdem der eigentlich Schlag statt, sprich das entfernen des alten Steines
+     */
+    @Override
     public boolean schlagGueltig(Feld start, Feld ziel, Feld[][] felder) { //0 = false, 1= true (zug ist richtig), 2= zug richtig und geschlagen
         int deltaXB = (int) Math.sqrt(Math.pow(start.getKoord()[0] - ziel.getKoord()[0], 2)); //Betrag der differenz der koordinaten der 2 gedrückten felder
         int deltaYB = (int) Math.sqrt(Math.pow(start.getKoord()[1] - ziel.getKoord()[1], 2));
@@ -70,16 +49,16 @@ Methode die prüft ob bei einem Zug auch ein Spielstein geschlagen wird. Hier fi
             int[] c = wieVieleSteineDazwischen(deltaX, deltaY, start, felder); //counter [0] wie viele Steine (gegnerische) zwischen dem Weg von start zu ziel liegen und [1] an welcher x stelle und an welcher [2] y stelle
 
             if (c[0] == 1) { //wenn nur ein stein dazwischen liegt dann ist der schlag gültig
-                mp3Schlag.play();
+                Assets.mp3Schlag.play();
                 int[] opferKoords = new int[2];
                 opferKoords[0] = start.getKoord()[0] + c[1];
                 opferKoords[1] = start.getKoord()[1] + c[2];
-                felder[opferKoords[0]][opferKoords[1]].setGraphic(new ImageView(blank));//der Stein ist ab hier nicht mehr sichtbar
+                felder[opferKoords[0]][opferKoords[1]].setGraphic(new ImageView(Assets.bauerWhite));//der Stein ist ab hier nicht mehr sichtbar
                 felder[opferKoords[0]][opferKoords[1]].setStein(null); //und ab hier auch nicht mehr im spiel. Das Feld ist wieder frei
 
                 return true;
             } else if (c[0] == 0) { //zug gueltig aber kein schlag
-                mp3zug.play();
+                Assets.mp3Zug.play();
                 return true;
             } else { //zug nicht gueltig, da mehrere gegnerische Steine oder ein eigener zwischen start und ziel liegen
                 return false;
@@ -88,11 +67,12 @@ Methode die prüft ob bei einem Zug auch ein Spielstein geschlagen wird. Hier fi
             return false;
         }
     }
-/*
-Methode die zwischen zwei feldern, die anzahl an Steinen zählt. Dabei wird sowohl geschaut OB, Wie viele, und Wo Steine dazwischen liegen.
-c(0. Wie viele Steine sind dazwischen? / 1. X-Koordinate eines Steins der dazwischen liegt / 2. Y-Koordinate ein.... liegt)
-c[0]= -1 bedeutet, dass hier ein Stein der eigenen Farbe versucht wurde zu schlagen.
- */
+
+    /*
+    Methode die zwischen zwei feldern, die anzahl an Steinen zählt. Dabei wird sowohl geschaut OB, Wie viele, und Wo Steine dazwischen liegen.
+    c(0. Wie viele Steine sind dazwischen? / 1. X-Koordinate eines Steins der dazwischen liegt / 2. Y-Koordinate ein.... liegt)
+    c[0]= -1 bedeutet, dass hier ein Stein der eigenen Farbe versucht wurde zu schlagen.
+     */
     private int[] wieVieleSteineDazwischen(int deltaX, int deltaY, Feld start, Feld[][] felder) { //return c (anzahl an steinen dazwischen), wenn c=-1, dann schlag nicht gültig
         int[] c = new int[3];
         /*

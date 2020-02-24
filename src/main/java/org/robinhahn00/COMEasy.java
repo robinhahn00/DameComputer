@@ -1,26 +1,17 @@
 package org.robinhahn00;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
-import java.io.File;
 import java.util.LinkedList;
+import java.util.List;
 
 public class COMEasy extends COM {
 
-    File fileBlank = new File("/Users/robin/Desktop/Dame/Leer.png"); //kein Stein
-    public Image blank = new Image(fileBlank.toURI().toString());
+    private Brett brett;
 
-    Feld[] zug = new Feld[2];
-    Brett brett;
+    private List<Stein> moeglich = new LinkedList<Stein>();
+    private Feld[][] felder;
 
-
-    LinkedList<Stein> möglich = new LinkedList<Stein>();
-    Feld[][] felder;
-
-    public COMEasy(Brett b) {
-        brett = b;
-
+    public COMEasy(Brett brett) {
+        this.brett = brett;
     }
 
     public Feld[] ziehe() {
@@ -31,19 +22,18 @@ public class COMEasy extends COM {
                 if (stein != null) {
                     if (!stein.getSteinC()) { //also schwarzer stein der ggf gespielt werden kann
                         if (kannErZiehen(stein)) {
-                            möglich.add(stein);
+                            moeglich.add(stein);
                         }
                     }
                 }
             }
         }
         //aus welchen Zahlen soll zufällig gewählt werden
-        int max = möglich.size();
+        int max = moeglich.size();
         int min = 1;
         int range = max - min + 1;
         int rand = (int) (Math.random() * range) + min;
-        zug = returnZug(möglich.get(rand - 1));
-        return zug;
+        return returnZug(moeglich.get(rand - 1));
     }
 
     public boolean kannErZiehen(Stein s) { //guckt ob ein stein ziehen kann oder sogar schlagen kann

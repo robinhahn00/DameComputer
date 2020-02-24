@@ -1,35 +1,16 @@
 package org.robinhahn00;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-
-import java.io.File;
 
 public class Bauer extends Stein {
 
-    private boolean dame = false; //= Dieser Stein ist keine Dame!
-    //Bilder für Steine
-    File fileBlank = new File("/Users/robin/Desktop/Dame/Leer.png"); //kein Stein
-    public Image blank = new Image(fileBlank.toURI().toString());
 
-    //SoundFiles
-    File soundZug = new File("/Users/robin/Desktop/Dame/Zug.m4a"); //kommt wenn ein Stein bewegt wird
-    Media media = new Media(soundZug.toURI().toString());
-    MediaPlayer mp3zug = new MediaPlayer(media);
-
-    File soundSchlagen = new File("/Users/robin/Desktop/Dame/Geschlagen.m4a"); //kommt wenn ein Stein geschlagen wird
-    Media schlag = new Media(soundSchlagen.toURI().toString());
-    MediaPlayer mp3Schlag = new MediaPlayer(schlag);
-
-
-    public Bauer(Feld f, boolean w) {
-        super(f, w);
+    public Bauer(Feld feld, boolean istWeiss) {
+        super(feld, istWeiss);
     }
 
     public boolean istDame() {
-        return dame;
+        return false;
     }
 
     @Override
@@ -66,10 +47,10 @@ public class Bauer extends Stein {
         return false;//ansonsten ist der Zug ungueltig
     }
 
-/*
-Diese Methode gibt True zurück, wenn ein Bauer 2 Felder Diagonal geht, das Ziel-Feld leer ist und er auf dem Weg einen gegnerischen Spieler
-überspringt. Dieser Wird dann geschlagen.
- */
+    /*
+    Diese Methode gibt True zurück, wenn ein Bauer 2 Felder Diagonal geht, das Ziel-Feld leer ist und er auf dem Weg einen gegnerischen Spieler
+    überspringt. Dieser Wird dann geschlagen.
+     */
     public boolean schlagGueltig(Feld start, Feld ziel, Feld[][] felder) {
 
         int deltaX = (int) Math.sqrt(Math.pow(start.getKoord()[0] - ziel.getKoord()[0], 2)); //Betrag der differenz der koordinaten der 2 gedrückten felder
@@ -86,8 +67,8 @@ Diese Methode gibt True zurück, wenn ein Bauer 2 Felder Diagonal geht, das Ziel
                 if (start.getStein() != null) { //gibt es überhaupt einen Stein der den Weg gehen möchte? oder ist das Start-Feld leer?
                     if (felder[opferKoords[0]][opferKoords[1]].getStein().getSteinC() != start.getStein().getSteinC()) { //versucht hier jemand seinen eigenen Stein zu schlagen?
                         //hier wird der eigentliche schlag ausgeführt
-                        mp3Schlag.play();
-                        felder[opferKoords[0]][opferKoords[1]].setGraphic(new ImageView(blank));  //das Bild wird entfernt
+                        Assets.mp3Schlag.play();
+                        felder[opferKoords[0]][opferKoords[1]].setGraphic(new ImageView(Assets.fieldBlank));  //das Bild wird entfernt
                         felder[opferKoords[0]][opferKoords[1]].setStein(null);// der Stein wird gelöscht
                         start.getBrettItsOn().setWurdeGradeGeschlagen(true); //dem Spiel wird gesagt, dass grade geschlagen wurde. Falls der Spieler
                         //mit dem selben Stein noch einen weiteren gegnerischen Stein schlagen kann, so muss er das auch noch tun! So sind die Regeln!

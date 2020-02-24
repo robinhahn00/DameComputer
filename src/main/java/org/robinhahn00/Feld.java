@@ -1,27 +1,21 @@
 package org.robinhahn00;
 
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.*;
-
-import java.io.File;
 
 
 public class Feld extends Button {
     //Das Feld ist ein Button der gedrückt werden kann. Steine stehen auf einem Feld
     private int[] xy = new int[2];
-    private boolean istWeiss = false;
+    private boolean istWeiss;
     private Brett brett;
     private Stein s = null;
-    
+
     private boolean gedrueckt = false; //ist das Feld gedrueckt?
 
+    public Feld(Brett brett, boolean w) {
+        this.brett = brett;
+        this.istWeiss = w;
 
-    public Feld(Brett b, boolean w) {
-
-
-        brett = b;
-        istWeiss = w;
         if (w) {
             this.setStyle("-fx-background-color: #000000"); //weiss
         } else {
